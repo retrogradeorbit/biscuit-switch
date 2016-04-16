@@ -51,7 +51,7 @@
          tv (s/make-sprite :tv :scale 4 :x 300 :y -280)
          tri-table (s/make-sprite :tri-table :scale 4 :x -250 :y 250)
          circle-table (s/make-sprite :round-table :scale 4 :x 0 :y 300)
-         square-table (s/make-sprite :square-table :scale 4 :x 250 :y 250)
+         square-table (s/make-sprite :square-table :scale 4 :x 250 :y 275)
          ]
 
         (player/player canvas)
