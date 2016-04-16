@@ -121,5 +121,5 @@
                    drag
                    (limit-y < 0)
                    (limit-y > 200)
-                   (limit-x < -400)
-                   (limit-x > 400)))))))
+                   (limit-x < -450)
+                   (limit-x > 450)))))))
