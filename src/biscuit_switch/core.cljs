@@ -4,6 +4,8 @@
             [biscuit-switch.player :as player]
             [biscuit-switch.text :as text]
             [biscuit-switch.stamper :as stamper]
+            [biscuit-switch.roller :as roller]
+            [biscuit-switch.oven :as oven]
 
             [infinitelives.pixi.canvas :as c]
             [infinitelives.pixi.events :as e]
@@ -58,8 +60,6 @@
         )]
       (m/with-sprite canvas :machines
         [
-         roller (s/make-sprite :roller :scale 4 :x -350 :y -72)
-         oven (s/make-sprite :oven :scale 4 :x 450 :y -148)
          tv (s/make-sprite :tv :scale 4 :x 300 :y -280)
          tri-table (s/make-sprite :tri-table :scale 4 :x -250 :y 275)
          circle-table (s/make-sprite :round-table :scale 4 :x 0 :y 300)
@@ -70,6 +70,9 @@
         (player/player canvas)
         (text/text-thread canvas)
         (stamper/stamper-thread canvas)
+        (roller/roller-thread canvas)
+        (oven/oven-thread canvas)
+
 
         (loop [c 20000]
 
