@@ -24,6 +24,8 @@
    :max-force 5.0
    :max-speed 7.0})
 
+(def state (atom {:pos (vec2/vec2 0 0)}))
+
 (defn left? []
   (events/is-pressed? :left))
 
@@ -89,7 +91,7 @@
               )
             )
           (if (< (vec2/magnitude (:vel b)) 0.01)
-            (let [fnum (int (/ c 30))]
+            (let [fnum (int (/ c 50))]
               (if (odd? fnum)
                 (s/set-texture! player :player-stand-left)
                 (s/set-texture! player :player-stand-left-2)
@@ -108,7 +110,15 @@
             (s/set-scale! player -4 4)))
 
 
+        ;
+        (swap! state assoc :pos (:pos b))
+        ;(.log js/console "pos:" (str (vec2/as-vector (:pos b))))
+
+
         (<! (e/next-frame))
+
+
+
 
         (recur (dec c)
 
