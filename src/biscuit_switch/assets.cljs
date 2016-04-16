@@ -44,4 +44,33 @@
    :round-table
    {:pos [101 132]
     :size [43 43]}
+
+   :fire-1
+   {:pos [384 64]
+    :size [16 16]}
+
+   :fire-2
+   {:pos [400 64]
+    :size [16 16]}
+
+   :fire-3
+   {:pos [416 64]
+    :size [16 16]}
+
+   :fire-4
+   {:pos [432 64]
+    :size [16 16]}
+
+   :siren-grey
+   {:pos [384 48]
+    :size [16 16]}
+
+   :siren-green
+   {:pos [400 48]
+    :size [16 16]}
+
+   :siren-red
+   {:pos [416 48]
+    :size [16 16]}
+
 })
