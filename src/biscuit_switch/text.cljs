@@ -24,6 +24,7 @@
 (defonce state
   (atom {:roller :none
          :stamper :none
+         :door :none
          :oven :none}))
 
 (defn text-thread [canvas]
@@ -39,6 +40,7 @@
                                   :x -350
                                   :y -150
                                   :visible false)
+
          stamper-on (pf/make-text :font "Switch the stamper on"
                                 :scale 2
                                 :x 0
@@ -51,6 +53,20 @@
                                  :y -150
                                  :visible false
                                  )
+         stamper-open (pf/make-text :font "Open the access door"
+                                :scale 2
+                                :x -50
+                                :y -150
+                                :visible false
+                                )
+         stamper-close (pf/make-text :font "Close the access door"
+                                 :scale 2
+                                 :x -50
+                                 :y -150
+                                 :visible false
+                                 )
+
+
          oven-on (pf/make-text :font "Switch the oven on"
                                :scale 2
                                :x 350
@@ -68,13 +84,13 @@
         (loop [f 0]
           (cond
             (events/is-pressed? :b)
-            (swap! state assoc :roller :on)
+            (swap! state assoc :door :open)
 
             (events/is-pressed? :n)
-            (swap! state assoc :roller :off)
+            (swap! state assoc :door :close)
 
             (events/is-pressed? :m)
-            (swap! state assoc :roller :none))
+            (swap! state assoc :door :none))
 
           ;; set states
           (let [[on off] (case (:roller @state)
@@ -97,6 +113,13 @@
                            :none [false false])]
             (s/set-visible! oven-off off)
             (s/set-visible! oven-on on))
+
+          (let [[open close] (case (:door @state)
+                           :open [true false]
+                           :close [false true]
+                           :none [false false])]
+            (s/set-visible! stamper-open open)
+            (s/set-visible! stamper-close close))
 
 
           (<! (e/next-frame))
