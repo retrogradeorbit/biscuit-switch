@@ -1,6 +1,7 @@
 (ns biscuit-switch.core
   (:require [biscuit-switch.assets :as assets]
             [biscuit-switch.game :as game]
+            [biscuit-switch.player :as player]
 
             [infinitelives.pixi.canvas :as c]
             [infinitelives.pixi.events :as e]
@@ -53,26 +54,13 @@
          square-table (s/make-sprite :square-table :scale 4 :x 250 :y 250)
          ]
 
-        (m/with-sprite canvas :player
-          [
-           player (s/make-sprite :player-stand-left
-                                 :scale 4
-                                 :x 0 :y 120)
-           ]
+        (player/player canvas)
 
-
-          (loop [c 20000]
-
-            (let [fnum (int (/ c 30))]
-              (if (odd? fnum)
-                (s/set-texture! player :player-stand-left)
-                (s/set-texture! player :player-stand-left-2)
-                )
-              )
+        (loop [c 20000]
 
             (<! (e/next-frame))
             (recur (dec c))
-            )))
+            ))
 
       )
 ))
