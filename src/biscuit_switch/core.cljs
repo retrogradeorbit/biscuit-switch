@@ -15,9 +15,10 @@
                    [infinitelives.pixi.macros :as m]))
 
 (defonce canvas
-  (c/init {:layers [:bg :belt :player :tables :ui]
+  (c/init {:layers [:bg :belt :machines :player :tables :ui]
            :background 0xa0a0a0
-           :expand true}))
+           :expand true
+           :origins {:roller :left}}))
 
 (defonce main
   (go
@@ -29,4 +30,33 @@
 
     (t/load-sprite-sheet!
      (r/get-texture :sprites :nearest)
-     assets/assets)))
+     assets/assets)
+
+    (m/with-sprite-set canvas :belt
+      [conveyors
+       (map
+        #(s/make-sprite :conveyor :scale 4
+                        :x (* 64 %)
+                       ;; TODO: get tiling going in infinitelives
+                                        ;:tiling :tiling-width 100 :tiling-height 100
+                        )
+        (range -10 10)
+        )]
+      (m/with-sprite canvas :machines
+        [
+         roller (s/make-sprite :roller :scale 4 :x -350 :y -72)
+         stamper (s/make-sprite :stamper :scale 4 :y -74)
+         oven (s/make-sprite :oven :scale 4 :x 450 :y -148)
+         tv (s/make-sprite :tv :scale 4 :x 300 :y -280)
+         tri-table (s/make-sprite :tri-table :scale 4 :x -250 :y 250)
+         circle-table (s/make-sprite :round-table :scale 4 :x 0 :y 300)
+         square-table (s/make-sprite :square-table :scale 4 :x 250 :y 250)
+         ]
+
+        (loop [c 20000]
+          (<! (e/next-frame))
+          (recur (dec c))
+          ))
+
+      )
+))
