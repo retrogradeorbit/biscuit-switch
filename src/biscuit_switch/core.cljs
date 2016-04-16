@@ -53,10 +53,26 @@
          square-table (s/make-sprite :square-table :scale 4 :x 250 :y 250)
          ]
 
-        (loop [c 20000]
-          (<! (e/next-frame))
-          (recur (dec c))
-          ))
+        (m/with-sprite canvas :player
+          [
+           player (s/make-sprite :player-stand-left
+                                 :scale 4
+                                 :x 0 :y 120)
+           ]
+
+
+          (loop [c 20000]
+
+            (let [fnum (int (/ c 30))]
+              (if (odd? fnum)
+                (s/set-texture! player :player-stand-left)
+                (s/set-texture! player :player-stand-left-2)
+                )
+              )
+
+            (<! (e/next-frame))
+            (recur (dec c))
+            )))
 
       )
 ))

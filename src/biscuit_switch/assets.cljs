@@ -21,16 +21,16 @@
    {:pos [281 7]
     :size [87 110]}
 
-   :player-1
-   {:pos [224 80]
+   :player-stand-left
+   {:pos [368 0]
     :size [32 32]}
 
-   :player-2
-   {:pos [256 80]
+   :player-stand-left-2
+   {:pos [(+ 32 368) 0]
     :size [32 32]}
 
-   :player-3
-   {:pos [288 80]
+   :player-stride-left
+   {:pos [(+ 32 32 368) 0]
     :size [32 32]}
 
    :tri-table
@@ -38,10 +38,10 @@
     :size [53 42]}
 
    :square-table
-   {:pos [43 132]
-    :size [53 42]}
+   {:pos [144 125]
+    :size [48 57]}
 
    :round-table
-   {:pos [43 132]
-    :size [53 42]}
+   {:pos [101 132]
+    :size [43 43]}
 })
