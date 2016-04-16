@@ -49,9 +49,9 @@
          stamper (s/make-sprite :stamper :scale 4 :y -74)
          oven (s/make-sprite :oven :scale 4 :x 450 :y -148)
          tv (s/make-sprite :tv :scale 4 :x 300 :y -280)
-         tri-table (s/make-sprite :tri-table :scale 4 :x -250 :y 250)
+         tri-table (s/make-sprite :tri-table :scale 4 :x -250 :y 275)
          circle-table (s/make-sprite :round-table :scale 4 :x 0 :y 300)
-         square-table (s/make-sprite :square-table :scale 4 :x 250 :y 275)
+         square-table (s/make-sprite :square-table :scale 4 :x 250 :y 300)
          ]
 
         (player/player canvas)
