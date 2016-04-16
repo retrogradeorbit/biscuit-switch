@@ -1,4 +1,4 @@
-(defproject switch "0.1.0-SNAPSHOT"
+(defproject biscuit-switch "0.1.0-SNAPSHOT"
   :description "FIXME: write this!"
   :url "http://example.com/FIXME"
   :license {:name "Eclipse Public License"
@@ -24,9 +24,9 @@
                 :source-paths ["src"]
 
                 ;; If no code is to be run, set :figwheel true for continued automagical reloading
-                :figwheel {:on-jsload "switch.core/on-js-reload"}
+                :figwheel {:on-jsload "biscuit-switch.core/on-js-reload"}
 
-                :compiler {:main switch.core
+                :compiler {:main biscuit-switch.core
                            :asset-path "js/compiled/out"
                            :output-to "resources/public/js/compiled/switch.js"
                            :output-dir "resources/public/js/compiled/out"
@@ -37,7 +37,7 @@
                {:id "min"
                 :source-paths ["src"]
                 :compiler {:output-to "resources/public/js/compiled/switch.js"
-                           :main switch.core
+                           :main biscuit-switch.core
                            :optimizations :advanced
                            :pretty-print false}}]}
 
@@ -48,7 +48,7 @@
              :css-dirs ["resources/public/css"] ;; watch and update CSS
 
              ;; Start an nREPL server into the running figwheel process
-             :nrepl-port 7888
+             ;; :nrepl-port 7888
 
              ;; Server Ring Handler (optional)
              ;; if you want to embed a ring handler into the figwheel http-kit
