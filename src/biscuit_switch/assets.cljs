@@ -41,7 +41,7 @@
    {:pos [43 132]
     :size [53 42]}
 
-   :circle-table
+   :round-table
    {:pos [43 132]
     :size [53 42]}
 })
