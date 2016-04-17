@@ -77,4 +77,22 @@
    {:pos [432 32]
     :size [32 32]}
 
-})
+   :dough-ball
+   {:pos [464 32]
+    :size [32 32]}
+
+   :dough-flat
+   {:pos [496 32]
+    :size [32 32]}
+
+   :biscuit-triangle
+   {:pos [464 64]
+    :size [16 16]}
+
+   :biscuit-square
+   {:pos [480 64]
+    :size [16 16]}
+
+   :biscuit-circle
+   {:pos [496 64]
+    :size [16 16]}})

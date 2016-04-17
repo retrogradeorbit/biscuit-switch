@@ -36,7 +36,11 @@
         ;; fire up sound
         (.log js/console "ON")
         (s/set-texture! siren :siren-green)
-        (<! (e/next-frame)))
+
+        (while (:running @state)
+            (<! (e/next-frame))
+            )
+        )
 
 
       (s/set-texture! siren :siren-grey)

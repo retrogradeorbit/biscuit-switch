@@ -1,6 +1,7 @@
 (ns biscuit-switch.roller
   (:require
             [biscuit-switch.text :as text]
+            [biscuit-switch.dough :as dough]
 
             [infinitelives.pixi.canvas :as c]
             [infinitelives.pixi.events :as e]
@@ -23,6 +24,8 @@
 (def switch-distance 20)
 (def switch-distance-squared (* switch-distance switch-distance))
 
+(def dough-interval 200)
+
 (defn roller-state [canvas roller siren]
   (go
     (loop []
@@ -30,7 +33,15 @@
         ;; fire up sound
         (.log js/console "ON")
         (s/set-texture! siren :siren-green)
-        (<! (e/next-frame)))
+
+        (loop [runtime 0]
+          (when (zero? (mod runtime dough-interval))
+            (dough/dough-thread canvas))
+
+          (when (:running @state)
+            (<! (e/next-frame))
+            (recur (inc runtime)))
+          ))
 
 
       (s/set-texture! siren :siren-grey)
