@@ -72,10 +72,10 @@
         (loop [f 0 pos stamper-position]
 
           (when (< pos oven-position)
-            (s/set-pos! biscuit  (+ pos 20) -30)
-            (s/set-pos! biscuit2 (+ pos 0) -20)
-            (s/set-pos! biscuit3 (+ pos 0) -40)
-            (s/set-pos! biscuit4 (+ pos -20) -30)
+            (s/set-pos! biscuit  (+ pos 20) -34)
+            (s/set-pos! biscuit2 (+ pos 0) -24)
+            (s/set-pos! biscuit3 (+ pos 0) -44)
+            (s/set-pos! biscuit4 (+ pos -20) -34)
 
             (<! (e/next-frame))
             (recur (inc f) (+ pos (dough-speed)))))

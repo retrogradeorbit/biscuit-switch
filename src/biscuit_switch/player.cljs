@@ -25,7 +25,10 @@
    :max-speed 7.0})
 
 (def anim-speed-empty 10)
-(def anim-speed-carrying 20)
+(def anim-speed-carrying 15)
+
+(def normal-speed 0.2)
+(def carrying-speed 0.06)
 
 (def state (atom {:pos (vec2/vec2 0 0)
                   :facing :left
@@ -140,8 +143,8 @@
 
 
         (let [speed (if (= :none (:carrying @state))
-                      0.2
-                      0.05)]
+                      normal-speed
+                      carrying-speed)]
           (recur (dec c)
 
                  (-> b
