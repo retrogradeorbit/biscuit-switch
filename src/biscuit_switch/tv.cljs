@@ -22,28 +22,116 @@
 
 
 (defonce state
-  (atom {:shape :any}))
+  (atom {:shape :any
+         :number 10
+         :level 1}))
 
 (def wait-min 1000)
 (def wait-max 2000)
 
-(defn alter [shape]
-  (swap! state assoc :shape shape))
+(def levels
+  [
+   [:any 1]
+   [:level-up]
+   [:any 1]
+   [:level-up]
+   [:any 1]
+   [:level-up]
+   [:any 1]
+   [:level-up]
+   [:any 1]
+   [:level-up]
+   [:any 1]
+   [:level-up]
+   [:any 1]
+   [:level-up]
+   [:any 1]
+   [:level-up]
+   [:any 1]
+   [:level-up]
+   [:any 1]
+   [:level-up]
+   [:any 1]
+   [:level-up]
+   [:any 1]
+   [:level-up]
+   [:any 1]
+   [:level-up]
+   [:any 1]
+   [:level-up]
+   [:any 1]
+   [:level-up]
+   [:any 1]
+   [:level-up]
+   [:any 1]
+   [:level-up]
+   [:any 1]
+   [:level-up]
+
+
+   [:triangle 1]
+   [:square 1]
+   [:circle 1]
+
+   [:level-up]
+
+   [:triangle 5]
+   [:any 5]
+   [:circle 5]
+   [:any 5]
+   [:square 5]
+   ])
+
+(defn alter [shape number]
+  (swap! state assoc :shape shape :number number))
+
+(defn one-made []
+  (swap! state update :number dec))
+
+(defn level-up []
+  (.log js/console "Level Up!")
+  (swap! state update :level inc)
+  (swap! biscuit-switch.dough/state update :speed + 0.1)
+  (swap! biscuit-switch.roller/state update :interval - 10)
+  )
+
+(defn tv-number-thread [canvas]
+  (go
+    (loop []
+      (when-let [amount (:number @state)]
+        (m/with-sprite canvas :ui
+          [money (pf/make-text :font (str amount)
+                               :scale 3
+                               :x 280
+                               :y -275
+                               :visible true)]
+
+          (while (= amount (:number @state))
+            (<! (e/next-frame)))))
+
+      (<! (e/next-frame))
+      (recur))))
 
 (defn tv-control-thread []
   (go
-    (loop []
-      ;; wait random time
-      (<! (e/wait-frames (math/rand-between wait-min wait-max)))
+    ;; start
+    (loop [[[type number] & rem] levels]
+      (if (= :level-up type)
+        (level-up)
 
-      ;; switch to random shape
-      (alter (rand-nth [:triangle :triangle :triangle
-                        :square :square :square
-                        :circle :circle :circle
-                        :any]))
+        (let [type
+              (if (= :random type)
+                (rand-nth [:triangle :circle :square :any])
+                type)]
+          (alter type number)
 
-      (recur))
-    )
+          ;; wait until done
+          (while (pos? (:number @state))
+            (<! (e/next-frame)))))
+
+      (when rem
+        (recur rem))
+      ))
 )
 
 (defn tv-thread [canvas]
@@ -54,6 +142,7 @@
        square (s/make-sprite :tv-square :scale 4 :x 260 :y -275 :visible false)
        circle (s/make-sprite :tv-circle :scale 4 :x 260 :y -275 :visible false)
        ]
+      (tv-number-thread canvas)
       (tv-control-thread)
       (loop []
         (let [[tri sq circ] (case (:shape @state)

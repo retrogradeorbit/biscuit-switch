@@ -3,6 +3,7 @@
             [biscuit-switch.text :as text]
             [biscuit-switch.money :as money]
             [biscuit-switch.rising :as rising]
+            [biscuit-switch.tv :as tv]
 
             [infinitelives.pixi.canvas :as c]
             [infinitelives.pixi.events :as e]
@@ -20,20 +21,23 @@
                    [infinitelives.pixi.macros :as m]))
 
 
-(def dough-speed 0.7)
+(defonce state (atom {:speed 0.7}))
 
-(def oven-position 630)
+(defn dough-speed [] (:speed @state))
+
+(def oven-position 440)
+(def stamper-position -30)
 (def roller-length 560)
 
 (defn uncut-thread [canvas]
   (go
     (m/with-sprite canvas :machines
       [biscuit (s/make-sprite :dough-flat :scale 4 :x 0 :y 0)]
-      (loop [f 0]
+      (loop [f 0 pos stamper-position]
         (when (< f oven-position)
-          (s/set-pos! biscuit  (+ (* f dough-speed) -20) -30)
+          (s/set-pos! biscuit  (+ pos -20))
           (<! (e/next-frame))
-          (recur (inc f))
+          (recur (inc f) (+ pos (dough-speed)))
           ))))
   )
 
@@ -50,16 +54,16 @@
          biscuit4 (s/make-sprite texture :scale 4 :x 0 :y 0)
          ]
 
-        (loop [f 0]
+        (loop [f 0 pos stamper-position]
 
-          (when (< f oven-position)
-            (s/set-pos! biscuit  (+ (* f dough-speed) -20) -30)
-            (s/set-pos! biscuit2 (+ (* f dough-speed) -40) -20)
-            (s/set-pos! biscuit3 (+ (* f dough-speed) -40) -40)
-            (s/set-pos! biscuit4 (+ (* f dough-speed) -60) -30)
+          (when (< pos oven-position)
+            (s/set-pos! biscuit  (+ pos 20) -30)
+            (s/set-pos! biscuit2 (+ pos 0) -20)
+            (s/set-pos! biscuit3 (+ pos 0) -40)
+            (s/set-pos! biscuit4 (+ pos -20) -30)
 
             (<! (e/next-frame))
-            (recur (inc f))))
+            (recur (inc f) (+ pos (dough-speed)))))
 
         ;; reached oven...
         (let [oven-on? (:running @biscuit-switch.oven/state)
@@ -71,7 +75,8 @@
                      (= shape tv-shape)))
             (do
               (rising/text canvas "+10" 2 (vec2/vec2 400 -40) (vec2/vec2 0 -1) 100)
-              (money/add 10))
+              (money/add 10)
+              (tv/one-made))
 
             (not oven-on?)
             (do
@@ -82,7 +87,7 @@
             :default
             (do
               (rising/text canvas "-5" 2 (vec2/vec2 400 -40) (vec2/vec2 0 -1) 100)
-              (money/sub 1))
+              (money/sub 5))
 
             ))
         )))
@@ -93,12 +98,12 @@
     (m/with-sprite canvas :machines
       [dough (s/make-sprite :dough-flat :scale 4 :x 0 :y 0)]
 
-      (loop [f 0]
+      (loop [f 0 pos -440]
 
-        (when (< f roller-length)
-          (s/set-pos! dough (+ (* f dough-speed) -440) -30)
+        (when (< pos stamper-position)
+          (s/set-pos! dough pos -30)
           (<! (e/next-frame))
-          (recur (inc f))
+          (recur (inc f) (+ pos (dough-speed)))
           )))
 
     ;; if stamper is on, we get stamped. if its off, we loose money

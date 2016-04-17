@@ -66,8 +66,8 @@
       (m/with-sprite canvas :machines
         [
          tri-table (s/make-sprite :tri-table :scale 4 :x -250 :y 275)
-         circle-table (s/make-sprite :round-table :scale 4 :x 0 :y 300)
-         square-table (s/make-sprite :square-table :scale 4 :x 250 :y 300)
+         circle-table (s/make-sprite :round-table :scale 4 :x 250 :y 275)
+         square-table (s/make-sprite :square-table :scale 4 :x 0 :y 325)
          ]
 
         ;; "threads"

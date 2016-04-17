@@ -18,13 +18,14 @@
   (:require-macros [cljs.core.async.macros :refer [go]]
                    [infinitelives.pixi.macros :as m]))
 
-(defonce state (atom {:running false}))
+(defonce state (atom {:running false
+                      :interval 200}))
 
 (def switch-pos (vec2/vec2 -430 0))
 (def switch-distance 20)
 (def switch-distance-squared (* switch-distance switch-distance))
 
-(def dough-interval 200)
+(defn dough-interval [] (max 50 (:interval @state)))
 
 (defn roller-state [canvas roller siren]
   (go
@@ -34,13 +35,15 @@
         (.log js/console "ON")
         (s/set-texture! siren :siren-green)
 
-        (loop [runtime 0]
-          (when (zero? (mod runtime dough-interval))
-            (dough/dough-thread canvas))
+        (loop [runtime 0 countdown 0]
+          (.log js/console countdown)
+          (when (not (pos? countdown))
+            (dough/dough-thread canvas)
+            (recur 0 (dough-interval)))
 
           (when (:running @state)
             (<! (e/next-frame))
-            (recur (inc runtime)))
+            (recur (inc runtime) (dec countdown)))
           ))
 
 
