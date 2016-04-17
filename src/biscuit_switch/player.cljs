@@ -24,7 +24,12 @@
    :max-force 5.0
    :max-speed 7.0})
 
-(def state (atom {:pos (vec2/vec2 0 0)}))
+(def anim-speed-empty 10)
+(def anim-speed-carrying 20)
+
+(def state (atom {:pos (vec2/vec2 0 0)
+                  :facing :left
+                  :carrying :triangle}))
 
 (defn left? []
   (events/is-pressed? :left))
@@ -45,6 +50,9 @@
                                0.95
                                0.90)))
   )
+
+(defn carry [s]
+  (swap! state assoc :carrying s))
 
 (defn limit-y
   "constrain boid to walkable area"
@@ -84,7 +92,11 @@
              b p-boid
              ]
         (if (or (left?) (right?) (up?) (down?))
-          (let [fnum (int (/ c 10))]
+          (let [fnum
+                (int (/ c
+                        (if
+                            (= :none (:carrying @state))
+                          anim-speed-empty anim-speed-carrying)))]
             (if (odd? fnum)
               (s/set-texture! player :player-stride-left)
               (s/set-texture! player :player-stand-left-2)
@@ -106,30 +118,34 @@
         (s/set-pos! player (:pos b))
         (let [face-left? (neg? (aget (:vel b) 0))]
           (if face-left?
-            (s/set-scale! player 4 4)
-            (s/set-scale! player -4 4)))
+            (do (swap! state assoc :facing :left)
+                (s/set-scale! player 4 4))
+            (do (swap! state assoc :facing :right)
+                (s/set-scale! player -4 4))))
 
 
-        ;
+                                        ;
         (swap! state assoc :pos (:pos b))
-        ;(.log js/console "pos:" (str (vec2/as-vector (:pos b))))
+                                        ;(.log js/console "pos:" (str (vec2/as-vector (:pos b))))
 
 
         (<! (e/next-frame))
 
 
 
+        (let [speed (if (= :none (:carrying @state))
+                      0.2
+                      0.05)]
+          (recur (dec c)
 
-        (recur (dec c)
-
-               (-> b
-                   (boid/apply-steering
-                    (vec2/vec2
-                     (if (left?) -0.2 (if (right?) 0.2 0.0))
-                     (if (up?) -0.2 (if (down?) 0.2 0.0)))
-                    )
-                   drag
-                   (limit-y < 0)
-                   (limit-y > 200)
-                   (limit-x < -450)
-                   (limit-x > 450)))))))
+                 (-> b
+                     (boid/apply-steering
+                      (vec2/vec2
+                       (if (left?) (- speed) (if (right?) speed 0.0))
+                       (if (up?) (- speed) (if (down?) speed 0.0)))
+                      )
+                     drag
+                     (limit-y < 0)
+                     (limit-y > 200)
+                     (limit-x < -450)
+                     (limit-x > 450))))))))

@@ -6,6 +6,7 @@
             [biscuit-switch.stamper :as stamper]
             [biscuit-switch.roller :as roller]
             [biscuit-switch.oven :as oven]
+            [biscuit-switch.triangle :as triangle]
 
             [infinitelives.pixi.canvas :as c]
             [infinitelives.pixi.events :as e]
@@ -23,7 +24,7 @@
                    ))
 
 (defonce canvas
-  (c/init {:layers [:bg :belt :machines :player :tables :ui]
+  (c/init {:layers [:bg :belt :machines :player :tables :stamps :ui]
            :background 0xa0a0a0
            :expand true
            :origins {:roller :left}}))
@@ -72,6 +73,7 @@
         (stamper/stamper-thread canvas)
         (roller/roller-thread canvas)
         (oven/oven-thread canvas)
+        (triangle/triangle-thread canvas)
 
 
         (loop [c 20000]
