@@ -59,11 +59,11 @@
 (defn roller-thread [canvas]
   (go
     (m/with-sprite canvas :machines
-      [roller (s/make-sprite :roller :scale 4 :x -350 :y -72)
+      [roller (s/make-sprite :roller :scale 4 :x -382 :y -72)
        siren (s/make-sprite
                     :siren-grey
                     :scale 4
-                    :x -400 :y -100)]
+                    :x -350 :y -160)]
       (roller-state canvas roller siren)
       (loop [f 0]
         (if (-> biscuit-switch.player/state

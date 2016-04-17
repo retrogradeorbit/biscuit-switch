@@ -55,7 +55,7 @@
       (biscuit-switch.triangle/reset)
       (reset)
       (<! ch))
-    (<! (e/wait-frames 300))
+    (<! (e/wait-frames 600))
     (biscuit-switch.money/reset)
 ))
 

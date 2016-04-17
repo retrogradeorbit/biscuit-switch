@@ -34,7 +34,7 @@
 
 (defn uncut-thread [canvas]
   (go
-    (m/with-sprite canvas :machines
+    (m/with-sprite canvas :dough
       [biscuit (s/make-sprite :dough-flat :scale 4 :x 0 :y 0)]
       (sound/play-sound :stamp 0.6 false)
       (loop [f 0 pos stamper-position]
@@ -62,7 +62,7 @@
                     :triangle :biscuit-triangle
                     :square :biscuit-square
                     :circle :biscuit-circle)]
-      (m/with-sprite canvas :machines
+      (m/with-sprite canvas :dough
         [biscuit (s/make-sprite texture :scale 4 :x 0 :y 0)
          biscuit2 (s/make-sprite texture :scale 4 :x 0 :y 0)
          biscuit3 (s/make-sprite texture :scale 4 :x 0 :y 0)
@@ -113,7 +113,7 @@
 
 (defn dough-thread [canvas]
   (go
-    (m/with-sprite canvas :machines
+    (m/with-sprite canvas :dough
       [dough (s/make-sprite :dough-flat :scale 4 :x 0 :y 0)]
 
       (sound/play-sound :dough 0.3 false)

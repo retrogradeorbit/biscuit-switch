@@ -151,7 +151,7 @@
 (defn tv-thread [canvas]
   (go
     (m/with-sprite canvas :machines
-      [tv (s/make-sprite :tv :scale 4 :x 300 :y -280)
+      [tv (s/make-sprite :tv :scale 4 :x 300 :y -295)
        triangle (s/make-sprite :tv-triangle :scale 4 :x 260 :y -275 :visible false)
        square (s/make-sprite :tv-square :scale 4 :x 260 :y -275 :visible false)
        circle (s/make-sprite :tv-circle :scale 4 :x 260 :y -275 :visible false)
