@@ -10,6 +10,7 @@
             [biscuit-switch.square :as square]
             [biscuit-switch.circle :as circle]
             [biscuit-switch.money :as money]
+            [biscuit-switch.tv :as tv]
 
             [infinitelives.pixi.canvas :as c]
             [infinitelives.pixi.events :as e]
@@ -64,7 +65,6 @@
         )]
       (m/with-sprite canvas :machines
         [
-         tv (s/make-sprite :tv :scale 4 :x 300 :y -280)
          tri-table (s/make-sprite :tri-table :scale 4 :x -250 :y 275)
          circle-table (s/make-sprite :round-table :scale 4 :x 0 :y 300)
          square-table (s/make-sprite :square-table :scale 4 :x 250 :y 300)
@@ -80,6 +80,7 @@
         (square/square-thread canvas)
         (circle/circle-thread canvas)
         (money/money-thread canvas)
+        (tv/tv-thread canvas)
 
 
         (loop [c 20000]
