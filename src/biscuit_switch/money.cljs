@@ -36,6 +36,7 @@
 (defn game-over [canvas]
   (go
     (.log js/console "Game Over!")
+    (sound/play-sound :game-over 1.0 false)
     (let [ch (rising/growing-text canvas "GAME OVER" 10
                                   (vec2/vec2 0 0)
                                   (vec2/vec2 0 -1)

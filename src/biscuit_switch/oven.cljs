@@ -74,7 +74,7 @@
 
             (when (events/is-pressed? :space)
               ;; sound
-              (sound/play-sound :bloop 1.00 false)
+              (sound/play-sound (if (:running @state) :off :on) 0.8 false)
               (swap! state update :running not)
 
               (while (events/is-pressed? :space)

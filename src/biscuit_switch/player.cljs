@@ -97,11 +97,12 @@
              b p-boid
              ]
         (if (or (left?) (right?) (up?) (down?))
-          (let [fnum
-                (int (/ c
-                        (if
-                            (= :none (:carrying @state))
-                          anim-speed-empty anim-speed-carrying)))]
+          (let [
+                div (if (= :none (:carrying @state))
+                          anim-speed-empty anim-speed-carrying)
+                fnum (int (/ c div))]
+            (when (and (even? fnum) (zero? (mod c div)))
+              (sound/play-sound :jump 0.2 false))
             (if (odd? fnum)
               (s/set-texture! player :player-stride-left)
               (s/set-texture! player :player-stand-left-2)

@@ -38,7 +38,20 @@
     (<! (r/load-resources canvas :ui
                           ["img/sprites.png"
                            "img/fonts.png"
-                           "sfx/bloop.ogg"]))
+                           "sfx/bloop.ogg"
+                           "sfx/game-over.ogg"
+                           "sfx/level-up.ogg"
+                           "sfx/money.ogg"
+                           "sfx/money-loss.ogg"
+                           "sfx/off.ogg"
+                           "sfx/on.ogg"
+                           "sfx/pick-up.ogg"
+                           "sfx/put-down.ogg"
+                           "sfx/splat.ogg"
+                           "sfx/splat-2.ogg"
+                           "sfx/dough.ogg"
+                           "sfx/jump.ogg"
+                           "sfx/stamp.ogg"]))
 
     (pf/pixel-font :font "img/fonts.png" [12 118] [229 167]
                    :chars ["ABCDEFGHIJKLMNOPQRSTUVWXYZ"

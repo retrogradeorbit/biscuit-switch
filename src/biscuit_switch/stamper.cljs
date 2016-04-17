@@ -67,18 +67,19 @@
       (loop [f 0]
 
         ;; on/off
-        (if (-> biscuit-switch.player/state
-                deref
-                :pos
-                (vec2/sub switch-pos)
-                vec2/magnitude-squared
-                (< switch-distance-squared))
+        (if (and (= :none (:carrying @biscuit-switch.player/state))
+                 (-> biscuit-switch.player/state
+                     deref
+                     :pos
+                     (vec2/sub switch-pos)
+                     vec2/magnitude-squared
+                     (< switch-distance-squared)))
           ;; show text
           (do
             (swap! text/state assoc :stamper (if (:running @state) :off :on))
             (when (events/is-pressed? :space)
               ;; sound
-              (sound/play-sound :bloop 1.00 false)
+              (sound/play-sound (if (:running @state) :off :on) 0.8 false)
               (swap! state update :running not)
 
               (while (events/is-pressed? :space)
@@ -93,11 +94,11 @@
         (if (and
              (not (:running @state))
              (-> biscuit-switch.player/state
-                     deref
-                     :pos
-                     (vec2/sub door-pos)
-                     vec2/magnitude-squared
-                     (< door-distance-squared)))
+                 deref
+                 :pos
+                 (vec2/sub door-pos)
+                 vec2/magnitude-squared
+                 (< door-distance-squared)))
           ;; show text
           (do
             (swap! text/state assoc :install
@@ -116,9 +117,6 @@
               ;; install cutter
               (let [cutter (:carrying @biscuit-switch.player/state)]
                 (swap! state assoc :cutter cutter)
-                (swap! biscuit-switch.triangle/state assoc :carried false)
-                (swap! biscuit-switch.square/state assoc :carried false)
-                (swap! biscuit-switch.circle/state assoc :carried false)
 
                 (case cutter
                   :triangle
@@ -127,8 +125,17 @@
                          :pos (vec2/vec2 -40 0)
                          :carried false)
 
-                  :square nil
-                  :circle nil)
+                  :square
+                  (swap! biscuit-switch.square/state
+                         assoc
+                         :pos (vec2/vec2 -40 0)
+                         :carried false)
+
+                  :circle
+                  (swap! biscuit-switch.circle/state
+                         assoc
+                         :pos (vec2/vec2 -40 0)
+                         :carried false))
 
                 (biscuit-switch.player/carry :none))
 
@@ -150,8 +157,10 @@
                   (swap! biscuit-switch.triangle/state
                          assoc :carried true)
 
-                  :square nil
-                  :circle nil))
+                  :square (swap! biscuit-switch.square/state
+                         assoc :carried true)
+                  :circle (swap! biscuit-switch.circle/state
+                         assoc :carried true)))
 
               (while (events/is-pressed? :space)
                 (<! (e/next-frame)))

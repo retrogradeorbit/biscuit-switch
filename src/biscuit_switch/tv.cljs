@@ -98,6 +98,7 @@
 
 (defn level-up [canvas]
   (.log js/console "Level Up!")
+  (sound/play-sound :level-up 1.0 false)
   (swap! state update :level inc)
   (swap! biscuit-switch.dough/state update :speed + 0.1)
   (swap! biscuit-switch.roller/state update :interval - 10)

@@ -74,7 +74,7 @@
               (swap! biscuit-switch.text/state assoc :triangle :putdown)
                                         ;(> (vec2/get-y (:pos @biscuit-switch.player/state)) 20)
               (when (events/is-pressed? :space)
-                (sound/play-sound :bloop 1.0 false)
+                (sound/play-sound :put-down 0.5 false)
                 (swap! state #(-> %
                                   (assoc :carried false)
                                   (assoc :pos
@@ -108,7 +108,7 @@
               (swap! biscuit-switch.text/state assoc :triangle :pickup)
 
               (when (events/is-pressed? :space)
-                (sound/play-sound :bloop 1.0 false)
+                (sound/play-sound :pick-up 0.5 false)
 
                 (swap! biscuit-switch.text/state assoc :triangle :none)
                 (swap! state assoc :carried true)

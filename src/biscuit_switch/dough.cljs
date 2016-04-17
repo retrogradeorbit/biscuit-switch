@@ -56,7 +56,7 @@
          biscuit3 (s/make-sprite texture :scale 4 :x 0 :y 0)
          biscuit4 (s/make-sprite texture :scale 4 :x 0 :y 0)
          ]
-
+        (sound/play-sound :stamp 0.6 false)
         (loop [f 0 pos stamper-position]
 
           (when (< pos oven-position)
@@ -77,18 +77,21 @@
                  (or (= :any tv-shape)
                      (= shape tv-shape)))
             (do
+              (sound/play-sound :money 0.5 false)
               (rising/text canvas "+10" 2 (vec2/vec2 400 -40) (vec2/vec2 0 -1) 100)
               (money/add 10)
               (tv/one-made))
 
             (not oven-on?)
             (do
+              (sound/play-sound :splat-2 0.3 false)
               (rising/text canvas "-1" 2 (vec2/vec2 400 -40) (vec2/vec2 0 -1) 100)
               (money/sub 1))
 
             ;; unsuccessful
             :default
             (do
+              (sound/play-sound :money-loss 0.3 false)
               (rising/text canvas "-5" 2 (vec2/vec2 400 -40) (vec2/vec2 0 -1) 100)
               (money/sub 5))
 
@@ -100,6 +103,8 @@
   (go
     (m/with-sprite canvas :machines
       [dough (s/make-sprite :dough-flat :scale 4 :x 0 :y 0)]
+
+      (sound/play-sound :dough 0.3 false)
 
       (loop [f 0 pos -440]
 
@@ -121,6 +126,7 @@
 
       ;; off, lose money
       (do
+        (sound/play-sound :splat 0.3 false)
         (rising/text canvas "-1" 2 (vec2/vec2 -80 -40) (vec2/vec2 0 -1) 100)
         (money/sub 1))
       )
