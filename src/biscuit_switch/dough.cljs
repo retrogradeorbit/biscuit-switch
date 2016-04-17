@@ -2,6 +2,7 @@
   (:require
             [biscuit-switch.text :as text]
             [biscuit-switch.money :as money]
+            [biscuit-switch.rising :as rising]
 
             [infinitelives.pixi.canvas :as c]
             [infinitelives.pixi.events :as e]
@@ -58,8 +59,33 @@
             (s/set-pos! biscuit4 (+ (* f dough-speed) -60) -30)
 
             (<! (e/next-frame))
-            (recur (inc f))
-            )))))
+            (recur (inc f))))
+
+        ;; reached oven...
+        (let [oven-on? (:running @biscuit-switch.oven/state)
+              tv-shape (:shape @biscuit-switch.tv/state)]
+          (cond
+            ;; successful batch
+            (and oven-on?
+                 (or (= :any tv-shape)
+                     (= shape tv-shape)))
+            (do
+              (rising/text canvas "+10" 2 (vec2/vec2 400 -40) (vec2/vec2 0 -1) 100)
+              (money/add 10))
+
+            (not oven-on?)
+            (do
+              (rising/text canvas "-1" 2 (vec2/vec2 400 -40) (vec2/vec2 0 -1) 100)
+              (money/sub 1))
+
+            ;; unsuccessful
+            :default
+            (do
+              (rising/text canvas "-5" 2 (vec2/vec2 400 -40) (vec2/vec2 0 -1) 100)
+              (money/sub 1))
+
+            ))
+        )))
   )
 
 (defn dough-thread [canvas]
@@ -86,7 +112,9 @@
         (biscuit-thread canvas (:cutter @biscuit-switch.stamper/state)))
 
       ;; off, lose money
-      (money/sub 1)
+      (do
+        (rising/text canvas "-1" 2 (vec2/vec2 -80 -40) (vec2/vec2 0 -1) 100)
+        (money/sub 1))
       )
     )
 )
