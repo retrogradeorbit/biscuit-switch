@@ -24,8 +24,27 @@
 (defonce state
   (atom {:shape :any}))
 
+(def wait-min 1000)
+(def wait-max 2000)
+
 (defn alter [shape]
   (swap! state assoc :shape shape))
+
+(defn tv-control-thread []
+  (go
+    (loop []
+      ;; wait random time
+      (<! (e/wait-frames (math/rand-between wait-min wait-max)))
+
+      ;; switch to random shape
+      (alter (rand-nth [:triangle :triangle :triangle
+                        :square :square :square
+                        :circle :circle :circle
+                        :any]))
+
+      (recur))
+    )
+)
 
 (defn tv-thread [canvas]
   (go
@@ -35,6 +54,7 @@
        square (s/make-sprite :tv-square :scale 4 :x 260 :y -275 :visible false)
        circle (s/make-sprite :tv-circle :scale 4 :x 260 :y -275 :visible false)
        ]
+      (tv-control-thread)
       (loop []
         (let [[tri sq circ] (case (:shape @state)
                               :triangle
