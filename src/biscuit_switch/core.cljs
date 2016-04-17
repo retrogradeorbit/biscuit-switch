@@ -71,7 +71,7 @@
       [background (s/make-sprite :background :scale 4)]
 
       (m/with-sprite canvas :ui
-        [title (s/make-sprite :title :scale 4 :x -250 :y -275)]
+        [title (s/make-sprite :title :scale 4 :x -250 :y -300)]
 
         (m/with-sprite-set canvas :belt
           [conveyors
