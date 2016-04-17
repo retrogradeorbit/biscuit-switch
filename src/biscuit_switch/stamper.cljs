@@ -85,12 +85,14 @@
           )
 
         ;; access door
-        (if (-> biscuit-switch.player/state
-                deref
-                :pos
-                (vec2/sub door-pos)
-                vec2/magnitude-squared
-                (< door-distance-squared))
+        (if (and
+             (not (:running @state))
+             (-> biscuit-switch.player/state
+                     deref
+                     :pos
+                     (vec2/sub door-pos)
+                     vec2/magnitude-squared
+                     (< door-distance-squared)))
           ;; show text
           (do
             (swap! text/state assoc :install
