@@ -1,12 +1,36 @@
-# switch
+# Biscuit Switch
 
-LudumDare 35
+Entry for LudumDare 35 Compo. Theme was "shapeshifter".
+
+[Play it.](https://retrogradeorbit.github.io/biscuit-switch/)
+
+![Title screen](./screenshot-5.png)
 
 ## Overview
 
-Theme is "shape shift".
+You have started work in the biscuit factory as a shape shifter. Lucky you!
 
-## Setup
+You must keep the production line running. The TV screen barks instructions on what shapes need to be cut to fulfil orders.
+
+You can switch each machine on and off. But you must make sure the right cutter blade shape is loaded into the stamper. Before you can load or unload the stamper, make sure the stamper is off. Then unload the old cutter, if there is one, and place it back on it's table. Take the new cutter stamp from the relevant table and load it into the stamper. Then switch the stamper back on.
+
+If you do well and succeed, then management will deem you worthy of faster work. Keep working! Faster! Faster!
+
+I've done the Jam a few times before, but this is my first attempt at the Compo.
+
+Hope you enjoy!
+
+## Controls
+
+Use cursor keys to move your little worker around the floor. Press space bar to perform actions.
+
+Runs best in google chrome.
+
+## Tools
+
+Sounds by jsfxr. Graphics done in aseprite. Code done in clojurescript.
+
+## Development Setup
 
 To get an interactive development environment run:
 
