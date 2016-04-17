@@ -25,7 +25,12 @@
   (atom {:roller :none
          :stamper :none
          :door :none
-         :oven :none}))
+         :oven :none
+         :stamp :none
+         :pickup-text-pos (vec2/vec2 0 0)}))
+
+(defn set-pickup-text-pos [pos]
+  (swap! state assoc :pickup-text-pos pos))
 
 (defn text-thread [canvas]
   (go (m/with-sprite canvas :ui
@@ -42,30 +47,29 @@
                                   :visible false)
 
          stamper-on (pf/make-text :font "Switch the stamper on"
-                                :scale 2
-                                :x 0
-                                :y -150
-                                :visible false
-                                )
+                                  :scale 2
+                                  :x 0
+                                  :y -150
+                                  :visible false
+                                  )
          stamper-off (pf/make-text :font "Switch the stamper off"
-                                 :scale 2
-                                 :x 0
-                                 :y -150
-                                 :visible false
-                                 )
+                                   :scale 2
+                                   :x 0
+                                   :y -150
+                                   :visible false
+                                   )
          stamper-open (pf/make-text :font "Open the access door"
-                                :scale 2
-                                :x -50
-                                :y -150
-                                :visible false
-                                )
+                                    :scale 2
+                                    :x -50
+                                    :y -150
+                                    :visible false
+                                    )
          stamper-close (pf/make-text :font "Close the access door"
-                                 :scale 2
-                                 :x -50
-                                 :y -150
-                                 :visible false
-                                 )
-
+                                     :scale 2
+                                     :x -50
+                                     :y -150
+                                     :visible false
+                                     )
 
          oven-on (pf/make-text :font "Switch the oven on"
                                :scale 2
@@ -79,18 +83,26 @@
                                 :y -150
                                 :visible false
                                 )
+
+         stamp-pickup (pf/make-text :font "Pick up the cutting stamp"
+                                    :scale 2 :x 0 :y 150 :visible false)
+
+         stamp-putdown (pf/make-text :font "Put down the cutting stamp"
+                                    :scale 2 :x 0 :y 150 :visible false)
+
+
          ]
 
         (loop [f 0]
           (cond
             (events/is-pressed? :b)
-            (swap! state assoc :door :open)
+            (swap! state assoc :stamp :pickup)
 
             (events/is-pressed? :n)
-            (swap! state assoc :door :close)
+            (swap! state assoc :stamp :putdown)
 
             (events/is-pressed? :m)
-            (swap! state assoc :door :none))
+            (swap! state assoc :stamp :none))
 
           ;; set states
           (let [[on off] (case (:roller @state)
@@ -115,12 +127,23 @@
             (s/set-visible! oven-on on))
 
           (let [[open close] (case (:door @state)
-                           :open [true false]
-                           :close [false true]
-                           :none [false false])]
+                               :open [true false]
+                               :close [false true]
+                               :none [false false])]
             (s/set-visible! stamper-open open)
             (s/set-visible! stamper-close close))
 
+          (let [[pickup putdown] (case (:stamp @state)
+                           :pickup [true false]
+                           :putdown [false true]
+                           :none [false false])]
+            (s/set-visible! stamp-putdown putdown)
+            (s/set-visible! stamp-pickup pickup))
+
+          ;; pickup text tracks stamp
+          (let [text-pos (vec2/add (:pickup-text-pos @state) (vec2/vec2 0 -50))]
+            (s/set-pos! stamp-putdown text-pos)
+            (s/set-pos! stamp-pickup text-pos))
 
           (<! (e/next-frame))
           (recur (inc f))

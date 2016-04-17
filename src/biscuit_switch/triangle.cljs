@@ -49,42 +49,54 @@
           (s/set-pos! stamp (:pos @state))
           )
 
-        (when (events/is-pressed? :space)
-          (sound/play-sound :bloop 1.00 false)
+        (if (:carried @state)
+          ;; drop?
+          (when (events/is-pressed? :space)
+            (sound/play-sound :bloop 1.0 false)
+            (swap! state #(-> %
+                              (assoc :carried false)
+                              (assoc :pos
+                                     (vec2/add
+                                      (:pos @biscuit-switch.player/state)
+                                      (vec2/vec2 0 20)))))
+            (biscuit-switch.player/carry :none)
 
-          (if (:carried @state)
-            ;; drop
+            ;; wait for release
+            (while (events/is-pressed? :space)
+                  (<! (e/next-frame))))
+
+          ;; pickup?
+          (if (-> biscuit-switch.player/state
+                  deref
+                  :pos
+                  (vec2/sub (:pos @state))
+                  vec2/magnitude-squared
+                  (< pickup-distance-squared))
             (do
-              (swap! state #(-> %
-                                (assoc :carried false)
-                                (assoc :pos
-                                       (vec2/add
-                                        (:pos @biscuit-switch.player/state)
-                                        (vec2/vec2 0 20)))))
-              (biscuit-switch.player/carry :none))
-
-            ;; pickup?
-            (if (-> biscuit-switch.player/state
-                    deref
-                    :pos
-                    (vec2/sub (:pos @state))
-                    vec2/magnitude-squared
-                    (< pickup-distance-squared))
               ;; show pickup text
+              (text/set-pickup-text-pos (:pos @state))
+              (swap! biscuit-switch.text/state assoc :stamp :pickup)
 
               (when (events/is-pressed? :space)
                 (sound/play-sound :bloop 1.0 false)
+
+                (swap! biscuit-switch.text/state assoc :stamp :none)
                 (swap! state assoc :carried true)
                 (biscuit-switch.player/carry :triangle)
 
                 (while (events/is-pressed? :space)
-                (<! (e/next-frame)))))
+                  (<! (e/next-frame)))))
+
+            ;; hide pickup text
+            (swap! biscuit-switch.text/state assoc :stamp :none)
             )
+          )
 
           ;; wait for space to be released
-          (while (events/is-pressed? :space)
-            (<! (e/next-frame)))
-          )
+
+        #_ (while (events/is-pressed? :space)
+                (<! (e/next-frame)))
+
 
         (<! (e/next-frame))
         (recur)))))
