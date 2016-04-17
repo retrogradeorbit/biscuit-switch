@@ -101,4 +101,16 @@
    {:pos [528 32]
     :size [32 32]}
 
+   :tv-triangle
+   {:pos [560 32]
+    :size [32 32]}
+
+   :tv-square
+   {:pos [592 32]
+    :size [32 32]}
+
+   :tv-circle
+   {:pos [624 32]
+    :size [32 32]}
+
 })
