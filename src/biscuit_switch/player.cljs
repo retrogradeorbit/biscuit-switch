@@ -29,7 +29,7 @@
 
 (def state (atom {:pos (vec2/vec2 0 0)
                   :facing :left
-                  :carrying :triangle}))
+                  :carrying :none}))
 
 (defn left? []
   (events/is-pressed? :left))
