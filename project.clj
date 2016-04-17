@@ -36,9 +36,9 @@
                ;; lein cljsbuild once min
                {:id "min"
                 :source-paths ["src"]
-                :compiler {:output-to "resources/public/js/compiled/switch.js"
+                :compiler {:output-to "build/js/compiled/switch.js"
                            :main biscuit-switch.core
-                           :optimizations :advanced
+                           :optimizations :simple ;:advanced
                            :pretty-print false}}]}
 
   :figwheel {;; :http-server-root "public" ;; default and assumes "resources"
