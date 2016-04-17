@@ -55,7 +55,8 @@
       (biscuit-switch.triangle/reset)
       (reset)
       (<! ch))
-    (<! (e/wait-frames 120))
+    (<! (e/wait-frames 300))
+    (biscuit-switch.money/reset)
 ))
 
 (defn money-thread [canvas]

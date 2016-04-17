@@ -36,13 +36,25 @@
   (go
     (m/with-sprite canvas :machines
       [biscuit (s/make-sprite :dough-flat :scale 4 :x 0 :y 0)]
+      (sound/play-sound :stamp 0.6 false)
       (loop [f 0 pos stamper-position]
-        (when (< f oven-position)
-          (s/set-pos! biscuit  (+ pos -20))
+        (when (< pos oven-position)
+          (s/set-pos! biscuit pos -30)
           (<! (e/next-frame))
-          (recur (inc f) (+ pos (dough-speed)))
-          ))))
-  )
+          (recur (inc f) (+ pos (dough-speed)))))
+      (let [oven-on? (:running @biscuit-switch.oven/state)]
+        (cond
+          (not oven-on?)
+          (do
+            (sound/play-sound :splat-2 0.3 false)
+            (rising/text canvas "-1" 2 (vec2/vec2 400 -40) (vec2/vec2 0 -1) 100)
+            (money/sub 1))
+
+          :default
+          (do
+            (sound/play-sound :money-loss 0.3 false)
+            (rising/text canvas "-5" 2 (vec2/vec2 400 -40) (vec2/vec2 0 -1) 100)
+            (money/sub 5)))))))
 
 (defn biscuit-thread [canvas shape]
   (go
