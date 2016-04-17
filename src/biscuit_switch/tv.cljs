@@ -1,6 +1,7 @@
 (ns biscuit-switch.tv
   (:require [biscuit-switch.assets :as assets]
             [biscuit-switch.game :as game]
+            [biscuit-switch.rising :as rising]
 
             [infinitelives.pixi.canvas :as c]
             [infinitelives.pixi.events :as e]
@@ -25,6 +26,12 @@
   (atom {:shape :any
          :number 10
          :level 1}))
+
+
+(defn reset []
+  (reset! state {:shape :any
+                 :number 10
+                 :level 1}))
 
 (def wait-min 1000)
 (def wait-max 2000)
@@ -88,12 +95,18 @@
 (defn one-made []
   (swap! state update :number dec))
 
-(defn level-up []
+
+(defn level-up [canvas]
   (.log js/console "Level Up!")
   (swap! state update :level inc)
   (swap! biscuit-switch.dough/state update :speed + 0.1)
   (swap! biscuit-switch.roller/state update :interval - 10)
-  )
+  (rising/growing-text canvas "LEVEL UP!" 10
+                        (vec2/vec2 0 0)
+                        (vec2/vec2 0 -10)
+                        60
+                        1.05
+                        0x80ffff))
 
 (defn tv-number-thread [canvas]
   (go
@@ -112,12 +125,12 @@
       (<! (e/next-frame))
       (recur))))
 
-(defn tv-control-thread []
+(defn tv-control-thread [canvas]
   (go
     ;; start
     (loop [[[type number] & rem] levels]
       (if (= :level-up type)
-        (level-up)
+        (level-up canvas)
 
         (let [type
               (if (= :random type)
@@ -143,7 +156,7 @@
        circle (s/make-sprite :tv-circle :scale 4 :x 260 :y -275 :visible false)
        ]
       (tv-number-thread canvas)
-      (tv-control-thread)
+      (tv-control-thread canvas)
       (loop []
         (let [[tri sq circ] (case (:shape @state)
                               :triangle

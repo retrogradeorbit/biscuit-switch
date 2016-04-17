@@ -19,13 +19,17 @@
                    [infinitelives.pixi.macros :as m]))
 
 (defonce state (atom {:running false
-                      :interval 200}))
+                      :interval 150}))
+
+(defn reset []
+  (reset! state {:running false
+                      :interval 150}))
 
 (def switch-pos (vec2/vec2 -430 0))
 (def switch-distance 20)
 (def switch-distance-squared (* switch-distance switch-distance))
 
-(defn dough-interval [] (max 50 (:interval @state)))
+(defn dough-interval [] (max 40 (:interval @state)))
 
 (defn roller-state [canvas roller siren]
   (go
@@ -36,7 +40,6 @@
         (s/set-texture! siren :siren-green)
 
         (loop [runtime 0 countdown 0]
-          (.log js/console countdown)
           (when (not (pos? countdown))
             (dough/dough-thread canvas)
             (recur 0 (dough-interval)))

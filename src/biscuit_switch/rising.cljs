@@ -30,3 +30,16 @@
         (<! (e/next-frame))
         (when (pos? c)
           (recur (dec c) (vec2/add p vel)))))))
+
+(defn growing-text [canvas text scale pos vel length grow tint]
+  (go
+    (m/with-sprite canvas :ui
+      [rising-text
+       (pf/make-text :font text :scale scale :tint tint)]
+      (loop [c length p pos s scale a 1.0]
+        (s/set-pos! rising-text p)
+        (s/set-scale! rising-text s)
+        (s/set-alpha! rising-text a)
+        (<! (e/next-frame))
+        (when (pos? c)
+          (recur (dec c) (vec2/add p vel) (* grow s) (/ c length)))))))

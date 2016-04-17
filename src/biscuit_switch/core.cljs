@@ -43,7 +43,7 @@
     (pf/pixel-font :font "img/fonts.png" [12 118] [229 167]
                    :chars ["ABCDEFGHIJKLMNOPQRSTUVWXYZ"
                            "abcdefghijklmnopqrstuvwxyz"
-                           "0123456789!?#`'.,-"]
+                           "0123456789!?#`'.,-+$"]
                    :kerning {"fo" -2  "ro" -1 "la" -1 }
                    :space 5)
 
@@ -53,44 +53,38 @@
      (r/get-texture :sprites :nearest)
      assets/assets)
 
-    (m/with-sprite-set canvas :belt
-      [conveyors
-       (map
-        #(s/make-sprite :conveyor :scale 4
-                        :x (* 64 %)
-                        ;; TODO: get tiling going in infinitelives
+    (m/with-sprite canvas :ui
+      [title (s/make-sprite :title :scale 4 :x -250 :y -275)]
+
+      (m/with-sprite-set canvas :belt
+        [conveyors
+         (map
+          #(s/make-sprite :conveyor :scale 4
+                          :x (* 64 %)
+                          ;; TODO: get tiling going in infinitelives
                                         ;:tiling :tiling-width 100 :tiling-height 100
-                        )
-        (range -10 10)
-        )]
-      (m/with-sprite canvas :machines
-        [
-         tri-table (s/make-sprite :tri-table :scale 4 :x -250 :y 275)
-         circle-table (s/make-sprite :round-table :scale 4 :x 250 :y 275)
-         square-table (s/make-sprite :square-table :scale 4 :x 0 :y 325)
-         ]
+                          )
+          (range -10 10)
+          )]
+        (m/with-sprite canvas :machines
+          [
+           tri-table (s/make-sprite :tri-table :scale 4 :x -250 :y 275)
+           circle-table (s/make-sprite :round-table :scale 4 :x 250 :y 275)
+           square-table (s/make-sprite :square-table :scale 4 :x 0 :y 325)
+           ]
 
-        ;; "threads"
-        (player/player canvas)
-        (text/text-thread canvas)
-        (stamper/stamper-thread canvas)
-        (roller/roller-thread canvas)
-        (oven/oven-thread canvas)
-        (triangle/triangle-thread canvas)
-        (square/square-thread canvas)
-        (circle/circle-thread canvas)
-        (money/money-thread canvas)
-        (tv/tv-thread canvas)
+          ;; "threads"
+          (player/player canvas)
+          (text/text-thread canvas)
+          (stamper/stamper-thread canvas)
+          (roller/roller-thread canvas)
+          (oven/oven-thread canvas)
+          (triangle/triangle-thread canvas)
+          (square/square-thread canvas)
+          (circle/circle-thread canvas)
+          (money/money-thread canvas)
+          (tv/tv-thread canvas)
 
-
-        (loop [c 20000]
-
-            (<! (e/next-frame))
-            (recur (dec c))
-            )
-
-)
-
-      )
-
-    ))
+          (while true
+            (<! (e/next-frame)))
+          )))))

@@ -21,6 +21,11 @@
                       :door false
                       :cutter :none}))
 
+(defn reset []
+  (reset! state {:running false
+                 :door false
+                 :cutter :none}))
+
 (def switch-pos (vec2/vec2 7 0))
 (def switch-distance 20)
 (def switch-distance-squared (* switch-distance switch-distance))

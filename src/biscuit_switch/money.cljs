@@ -1,6 +1,6 @@
 (ns biscuit-switch.money
   (:require [biscuit-switch.assets :as assets]
-            [biscuit-switch.game :as game]
+            [biscuit-switch.rising :as rising]
 
             [infinitelives.pixi.canvas :as c]
             [infinitelives.pixi.events :as e]
@@ -24,29 +24,61 @@
 (defonce state
   (atom {:money 0}))
 
+(defn reset []
+  (reset! state {:money 0}))
+
 (defn alter [f money]
   (swap! state update :money #(f % money)))
 
 (def add (partial alter +))
 (def sub (partial alter -))
 
+(defn game-over [canvas]
+  (go
+    (.log js/console "Game Over!")
+    (let [ch (rising/growing-text canvas "GAME OVER" 10
+                                  (vec2/vec2 0 0)
+                                  (vec2/vec2 0 -1)
+                                  120
+                                  1.01
+                                  0xff0000)]
+      (biscuit-switch.circle/reset)
+      (biscuit-switch.dough/reset)
+      (biscuit-switch.money/reset)
+      (biscuit-switch.oven/reset)
+      (biscuit-switch.player/reset)
+      (biscuit-switch.roller/reset)
+      (biscuit-switch.square/reset)
+      (biscuit-switch.stamper/reset)
+      (biscuit-switch.text/reset)
+      (biscuit-switch.triangle/reset)
+      (reset)
+      (<! ch))
+    (<! (e/wait-frames 120))
+))
+
 (defn money-thread [canvas]
   (go
     (m/with-sprite canvas :ui
       [money-bag (s/make-sprite
                   :money-bag
-                  :scale 4 :x -50 :y -300)]
+                  :scale 4 :x -20 :y -300)]
 
       (loop []
         (let [amount (:money @state)]
           (m/with-sprite canvas :ui
-            [money (pf/make-text :font (str amount)
+            [money (pf/make-text :font (str "$" amount)
                                  :scale 4
-                                 :x 20
+                                 :x 80
                                  :y -320
                                  :visible true)]
 
             (while (= amount (:money @state))
-              (<! (e/next-frame)))))
+              (<! (e/next-frame))))
+
+          (when (< amount -100)
+            (<! (game-over canvas)))
+
+          )
 
         (recur)))))

@@ -20,6 +20,9 @@
 
 (defonce state (atom {:carried false}))
 
+(defn reset []
+  (reset! state {:carried false}))
+
 (def pickup-distance 10)
 (def pickup-distance-squared (* pickup-distance pickup-distance))
 

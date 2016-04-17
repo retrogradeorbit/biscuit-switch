@@ -31,6 +31,16 @@
          :circle :none
          :square :none}))
 
+(defn reset []
+  (reset! state {:roller :none
+         :stamper :none
+         :install :none
+         :oven :none
+         :stamp :none
+         :triangle :none
+         :circle :none
+         :square :none}))
+
 (defn text-thread [canvas]
   (go (m/with-sprite canvas :ui
         [roller-on (pf/make-text :font "Switch the roller on"

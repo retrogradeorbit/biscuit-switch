@@ -31,6 +31,11 @@
                   :facing :left
                   :carrying :none}))
 
+(defn reset []
+  (reset! state {:pos (vec2/vec2 0 0)
+                  :facing :left
+                  :carrying :none}))
+
 (defn left? []
   (events/is-pressed? :left))
 

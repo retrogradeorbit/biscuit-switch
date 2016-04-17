@@ -23,6 +23,9 @@
 
 (defonce state (atom {:speed 0.7}))
 
+(defn reset []
+  (reset! state {:speed 0.7}))
+
 (defn dough-speed [] (:speed @state))
 
 (def oven-position 440)

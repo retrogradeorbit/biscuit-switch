@@ -19,6 +19,9 @@
 
 (defonce state (atom {:running false}))
 
+(defn reset []
+  (reset! state {:running false}))
+
 (def switch-pos (vec2/vec2 330 0))
 (def switch-distance 20)
 (def switch-distance-squared (* switch-distance switch-distance))
