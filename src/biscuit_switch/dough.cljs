@@ -1,6 +1,7 @@
 (ns biscuit-switch.dough
   (:require
             [biscuit-switch.text :as text]
+            [biscuit-switch.money :as money]
 
             [infinitelives.pixi.canvas :as c]
             [infinitelives.pixi.events :as e]
@@ -61,8 +62,7 @@
       (biscuit-thread canvas)
 
       ;; off, lose money
-      nil
-
+      (money/sub 1)
       )
     )
 )

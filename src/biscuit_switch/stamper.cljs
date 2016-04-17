@@ -18,7 +18,8 @@
                    [infinitelives.pixi.macros :as m]))
 
 (defonce state (atom {:running false
-                      :door false}))
+                      :door false
+                      :cutter :none}))
 
 (def switch-pos (vec2/vec2 7 0))
 (def switch-distance 20)
@@ -54,9 +55,9 @@
     (m/with-sprite canvas :machines
       [stamper (s/make-sprite :stamper :scale 4 :y -74)
        siren (s/make-sprite
-                    :siren-grey
-                    :scale 4
-                    :x 55 :y -100)]
+              :siren-grey
+              :scale 4
+              :x 55 :y -100)]
       (stamper-state canvas stamper siren)
       (loop [f 0]
 
@@ -92,17 +93,69 @@
                 (< door-distance-squared))
           ;; show text
           (do
-            (swap! text/state assoc :door (if (:door @state) :close :open))
-            (when (events/is-pressed? :space)
+            (swap! text/state assoc :install
+                   (if (not= :none (:cutter @state))
+                     :remove
+                     (if (not= :none (:carrying @biscuit-switch.player/state))
+                       :install
+                       :none)))
+
+            (when
+                (and (not= :none (:carrying @biscuit-switch.player/state))
+                     (events/is-pressed? :space))
               ;; sound
               (sound/play-sound :bloop 1.00 false)
-              (swap! state update :door not)
+
+              ;; install cutter
+              (let [cutter (:carrying @biscuit-switch.player/state)]
+                (swap! state assoc :cutter cutter)
+                (swap! biscuit-switch.triangle/state assoc :carried false)
+                (swap! biscuit-switch.square/state assoc :carried false)
+                (swap! biscuit-switch.circle/state assoc :carried false)
+
+                (case cutter
+                  :triangle
+                  (swap! biscuit-switch.triangle/state
+                         assoc
+                         :pos (vec2/vec2 -40 0)
+                         :carried false)
+
+                  :square nil
+                  :circle nil)
+
+                (biscuit-switch.player/carry :none))
 
               (while (events/is-pressed? :space)
-                (<! (e/next-frame)))))
+                (<! (e/next-frame))))
+
+            (when
+                (and (= :none (:carrying @biscuit-switch.player/state))
+                     (not= :none (:cutter @state))
+                     (events/is-pressed? :space))
+              ;; remove cutter
+              (sound/play-sound :bloop 1.00 false)
+
+              (let [cutter (:cutter @state)]
+                (swap! state assoc :cutter :none)
+                (biscuit-switch.player/carry cutter)
+                (case cutter
+                  :triangle
+                  (swap! biscuit-switch.triangle/state
+                         assoc :carried true)
+
+                  :square nil
+                  :circle nil))
+
+              (while (events/is-pressed? :space)
+                (<! (e/next-frame)))
+
+
+              )
+
+            )
 
           ;; hide text
-          (swap! text/state assoc :door :none)
+          (swap! text/state assoc :install :none)
 
           )
 

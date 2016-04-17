@@ -1,4 +1,4 @@
-(ns biscuit-switch.triangle
+(ns biscuit-switch.square
   (:require
             [biscuit-switch.text :as text]
 
@@ -18,17 +18,17 @@
                    [infinitelives.pixi.macros :as m]))
 
 
-(defonce state (atom {:pos (vec2/vec2 0 0)
-                      :carried true}))
+(defonce state (atom {:pos (vec2/vec2 -100 100)
+                      :carried false}))
 
 (def pickup-distance 10)
 (def pickup-distance-squared (* pickup-distance pickup-distance))
 
-(defn triangle-thread [canvas]
+(defn square-thread [canvas]
   (go
     (m/with-sprite canvas :stamps
       [stamp (s/make-sprite :stamp :scale 4
-                            :x 100 :y 100)]
+                            :x -100 :y 100)]
 
       (loop []
 
@@ -51,9 +51,7 @@
 
         (if (:carried @state)
           ;; drop?
-          (when (and
-                 (> (vec2/get-y (:pos @biscuit-switch.player/state)) 20)
-                 (events/is-pressed? :space))
+          (when (events/is-pressed? :space)
             (sound/play-sound :bloop 1.0 false)
             (swap! state #(-> %
                               (assoc :carried false)
@@ -68,14 +66,12 @@
                   (<! (e/next-frame))))
 
           ;; pickup?
-          (if (and
-               (> (vec2/get-y (:pos @biscuit-switch.player/state)) 20)
-               (-> biscuit-switch.player/state
-                       deref
-                       :pos
-                       (vec2/sub (:pos @state))
-                       vec2/magnitude-squared
-                       (< pickup-distance-squared)))
+          (if (-> biscuit-switch.player/state
+                  deref
+                  :pos
+                  (vec2/sub (:pos @state))
+                  vec2/magnitude-squared
+                  (< pickup-distance-squared))
             (do
               ;; show pickup text
               (text/set-pickup-text-pos (:pos @state))
@@ -86,7 +82,7 @@
 
                 (swap! biscuit-switch.text/state assoc :stamp :none)
                 (swap! state assoc :carried true)
-                (biscuit-switch.player/carry :triangle)
+                (biscuit-switch.player/carry :square)
 
                 (while (events/is-pressed? :space)
                   (<! (e/next-frame)))))

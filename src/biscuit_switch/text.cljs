@@ -24,7 +24,7 @@
 (defonce state
   (atom {:roller :none
          :stamper :none
-         :door :none
+         :install :none
          :oven :none
          :stamp :none
          :pickup-text-pos (vec2/vec2 0 0)}))
@@ -58,13 +58,13 @@
                                    :y -150
                                    :visible false
                                    )
-         stamper-open (pf/make-text :font "Open the access door"
+         stamper-install (pf/make-text :font "Install the shape cutter"
                                     :scale 2
                                     :x -50
                                     :y -150
                                     :visible false
                                     )
-         stamper-close (pf/make-text :font "Close the access door"
+         stamper-remove (pf/make-text :font "Remove the shape cutter"
                                      :scale 2
                                      :x -50
                                      :y -150
@@ -126,12 +126,12 @@
             (s/set-visible! oven-off off)
             (s/set-visible! oven-on on))
 
-          (let [[open close] (case (:door @state)
-                               :open [true false]
-                               :close [false true]
+          (let [[install remove] (case (:install @state)
+                               :install [true false]
+                               :remove [false true]
                                :none [false false])]
-            (s/set-visible! stamper-open open)
-            (s/set-visible! stamper-close close))
+            (s/set-visible! stamper-install install)
+            (s/set-visible! stamper-remove remove))
 
           (let [[pickup putdown] (case (:stamp @state)
                            :pickup [true false]

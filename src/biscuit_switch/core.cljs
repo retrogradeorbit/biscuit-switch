@@ -7,6 +7,9 @@
             [biscuit-switch.roller :as roller]
             [biscuit-switch.oven :as oven]
             [biscuit-switch.triangle :as triangle]
+            [biscuit-switch.square :as square]
+            [biscuit-switch.circle :as circle]
+            [biscuit-switch.money :as money]
 
             [infinitelives.pixi.canvas :as c]
             [infinitelives.pixi.events :as e]
@@ -39,7 +42,7 @@
     (pf/pixel-font :font "img/fonts.png" [12 118] [229 167]
                    :chars ["ABCDEFGHIJKLMNOPQRSTUVWXYZ"
                            "abcdefghijklmnopqrstuvwxyz"
-                           "0123456789!?#`'.,"]
+                           "0123456789!?#`'.,-"]
                    :kerning {"fo" -2  "ro" -1 "la" -1 }
                    :space 5)
 
@@ -74,6 +77,9 @@
         (roller/roller-thread canvas)
         (oven/oven-thread canvas)
         (triangle/triangle-thread canvas)
+        (square/square-thread canvas)
+        (circle/circle-thread canvas)
+        (money/money-thread canvas)
 
 
         (loop [c 20000]

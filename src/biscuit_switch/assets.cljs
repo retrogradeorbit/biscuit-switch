@@ -95,4 +95,10 @@
 
    :biscuit-circle
    {:pos [496 64]
-    :size [16 16]}})
+    :size [16 16]}
+
+   :money-bag
+   {:pos [528 32]
+    :size [32 32]}
+
+})
