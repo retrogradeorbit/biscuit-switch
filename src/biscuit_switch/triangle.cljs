@@ -18,8 +18,7 @@
                    [infinitelives.pixi.macros :as m]))
 
 
-(defonce state (atom {:pos (vec2/vec2 0 0)
-                      :carried false}))
+(defonce state (atom {:carried false}))
 
 (def pickup-distance 10)
 (def pickup-distance-squared (* pickup-distance pickup-distance))
