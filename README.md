@@ -16,19 +16,23 @@ You can switch each machine on and off. But you must make sure the right cutter 
 
 If you do well and succeed, then management will deem you worthy of faster work. Keep working! Faster! Faster!
 
-I've done the Jam a few times before, but this is my first attempt at the Compo.
+If you lose more than $100, you're fired!
 
-Hope you enjoy!
+There is no end to the work... just like the real world!
 
 ## Controls
 
-Use cursor keys to move your little worker around the floor. Press space bar to perform actions.
+Use cursor keys to move your little worker around the floor.
+
+Press space bar to perform actions.
 
 Runs best in google chrome.
 
 ## Tools
 
-Sounds by jsfxr. Graphics done in aseprite. Code done in clojurescript.
+ - Sounds by jsfxr.
+ - Graphics done in aseprite.
+ - Code done in clojurescript.
 
 ## Development Setup
 
