@@ -21,26 +21,45 @@
 
 (def dough-speed 0.7)
 
-(defn biscuit-thread [canvas]
+(def oven-position 630)
+(def roller-length 560)
+
+(defn uncut-thread [canvas]
   (go
     (m/with-sprite canvas :machines
-      [biscuit (s/make-sprite :biscuit-triangle :scale 4 :x 0 :y 0)
-       biscuit2 (s/make-sprite :biscuit-triangle :scale 4 :x 0 :y 0)
-       biscuit3 (s/make-sprite :biscuit-triangle :scale 4 :x 0 :y 0)
-       biscuit4 (s/make-sprite :biscuit-triangle :scale 4 :x 0 :y 0)
-       ]
-
+      [biscuit (s/make-sprite :dough-flat :scale 4 :x 0 :y 0)]
       (loop [f 0]
-
-        (when (< f 560)
+        (when (< f oven-position)
           (s/set-pos! biscuit  (+ (* f dough-speed) -20) -30)
-          (s/set-pos! biscuit2 (+ (* f dough-speed) -40) -20)
-          (s/set-pos! biscuit3 (+ (* f dough-speed) -40) -40)
-          (s/set-pos! biscuit4 (+ (* f dough-speed) -60) -30)
-
           (<! (e/next-frame))
           (recur (inc f))
           ))))
+  )
+
+(defn biscuit-thread [canvas shape]
+  (go
+    (let [texture (case shape
+                    :triangle :biscuit-triangle
+                    :square :biscuit-square
+                    :circle :biscuit-circle)]
+      (m/with-sprite canvas :machines
+        [biscuit (s/make-sprite texture :scale 4 :x 0 :y 0)
+         biscuit2 (s/make-sprite texture :scale 4 :x 0 :y 0)
+         biscuit3 (s/make-sprite texture :scale 4 :x 0 :y 0)
+         biscuit4 (s/make-sprite texture :scale 4 :x 0 :y 0)
+         ]
+
+        (loop [f 0]
+
+          (when (< f oven-position)
+            (s/set-pos! biscuit  (+ (* f dough-speed) -20) -30)
+            (s/set-pos! biscuit2 (+ (* f dough-speed) -40) -20)
+            (s/set-pos! biscuit3 (+ (* f dough-speed) -40) -40)
+            (s/set-pos! biscuit4 (+ (* f dough-speed) -60) -30)
+
+            (<! (e/next-frame))
+            (recur (inc f))
+            )))))
   )
 
 (defn dough-thread [canvas]
@@ -50,7 +69,7 @@
 
       (loop [f 0]
 
-        (when (< f 560)
+        (when (< f roller-length)
           (s/set-pos! dough (+ (* f dough-speed) -440) -30)
           (<! (e/next-frame))
           (recur (inc f))
@@ -59,7 +78,12 @@
     ;; if stamper is on, we get stamped. if its off, we loose money
     (if (:running @biscuit-switch.stamper/state)
       ;; on
-      (biscuit-thread canvas)
+      (if (= :none (:cutter @biscuit-switch.stamper/state))
+        ;; no cutter installed... dough comes out other end
+        (uncut-thread canvas)
+
+        ;; cutter installed
+        (biscuit-thread canvas (:cutter @biscuit-switch.stamper/state)))
 
       ;; off, lose money
       (money/sub 1)
