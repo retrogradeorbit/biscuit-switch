@@ -4,7 +4,7 @@ Entry for LudumDare 35 Compo. Theme was "shapeshifter".
 
 [PLAY IT NOW!](https://retrogradeorbit.github.io/biscuit-switch/)
 
-![Title screen](./screenshot-5.png)
+![Title screen](./screenshot-6.png)
 
 ## Overview
 
