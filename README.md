@@ -32,7 +32,9 @@ Runs best in google chrome.
 
  - Sounds by jsfxr.
  - Graphics done in aseprite.
- - Code done in clojurescript.
+ - Code done in clojurescript, with:
+     - infinitelives.pixi
+     - infinitelives.utils
 
 ## Development Setup
 
