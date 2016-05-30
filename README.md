@@ -30,11 +30,11 @@ Runs best in google chrome.
 
 ## Tools
 
- - Sounds by jsfxr.
- - Graphics done in aseprite.
+ - Sounds by [jsfxr](http://github.grumdrig.com/jsfxr/).
+ - Graphics done in [aseprite](http://www.aseprite.org/).
  - Code done in clojurescript, with:
-     - infinitelives.pixi
-     - infinitelives.utils
+     - [infinitelives.pixi](https://github.com/infinitelives/infinitelives.pixi)
+     - [infinitelives.utils](https://github.com/infinitelives/infinitelives.utils)
 
 ## Development Setup
 
