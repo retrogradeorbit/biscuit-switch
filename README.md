@@ -4,7 +4,7 @@ Entry for LudumDare 35 Compo. Theme was "shapeshifter".
 
 [PLAY IT NOW!](https://retrogradeorbit.github.io/biscuit-switch/)
 
-![Title screen](./screenshot-5.png)
+![Title screen](./screenshot-6.png)
 
 ## Overview
 
@@ -30,9 +30,11 @@ Runs best in google chrome.
 
 ## Tools
 
- - Sounds by jsfxr.
- - Graphics done in aseprite.
- - Code done in clojurescript.
+ - Sounds by [jsfxr](http://github.grumdrig.com/jsfxr/).
+ - Graphics done in [aseprite](http://www.aseprite.org/).
+ - Code done in clojurescript, with:
+     - [infinitelives.pixi](https://github.com/infinitelives/infinitelives.pixi)
+     - [infinitelives.utils](https://github.com/infinitelives/infinitelives.utils)
 
 ## Development Setup
 
