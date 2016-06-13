@@ -39,7 +39,13 @@
 (def levels
   [
    [:triangle 5]
+
+   [:level-up]
+
    [:square 5]
+
+   [:level-up]
+
    [:circle 5]
 
    [:level-up]
